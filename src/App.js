@@ -1,9 +1,11 @@
-import { Card } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { useState } from "react";
 
 function App() {
+  //state hook
   const data = [
     {
       productImage:
@@ -35,35 +37,23 @@ function App() {
     },
   ];
 
-  
-  const show = true
+  const [count, setCount] = useState(0)
   return (
     <div className="App">
-      <div className="card-container">
-      {data.map((prod, idx) => (
-        <Card key = {idx} style={{ width: "18rem" }}>
-          <Card.Img variant="top" src={prod.productImage} />
-          <Card.Body>
-            <Card.Title>{prod.productName}</Card.Title>
-            <Card.Text>{prod.price} RS</Card.Text>
-            <Card.Text>{prod.rating} ♥</Card.Text>
-                        {/* conditional rendering */}
+      <div className="cart-value">
+      <Badge bg="success">
+        CART {count}
+      </Badge>
+      </div>
 
-            <Button
-             variant="primary"
-             onClick={()=>console.log("buy clicked")}
-             >Buy Now</Button>
+     <div className="card-container">
+      {data.map((prod, idx)=> <Cards
+      idx = {idx}
+      prod = {prod}
+      setCount= {setCount}
+      count = {count}
+      />)}
 
-
-             {show ? <Button 
-             variant="danger"
-             onClick={()=>console.log("remove clicked")}
-             >remove now</Button> : ""}
-
-
-          </Card.Body>
-        </Card>
-      ))}
       </div>
     </div>
   );
@@ -71,8 +61,40 @@ function App() {
 
 export default App;
 
-// Working with array lists
-// Usage of keys
-// Conditional rendering
-// Handling Events
-// Props vs state
+function Cards({prod, idx, setCount, count}){
+  const [show, setShow] = useState(false);
+
+  function addToCart(){
+    setShow(!show)
+    setCount(count + 1)
+  }
+
+  function removeFromCart(){
+    setShow(!show)
+    setCount(count - 1)
+  }
+
+  return (
+      <Card key = {idx} style={{ width: "18rem" }}>
+        <Card.Img variant="top" src={prod.productImage} />
+        <Card.Body>
+          <Card.Title>{prod.productName}</Card.Title>
+          <Card.Text>{prod.price} RS</Card.Text>
+          <Card.Text>{prod.rating} ♥</Card.Text>
+        {/* conditional rendering */}
+
+         {!show ? <Button
+           variant="primary"
+           onClick={addToCart}
+           >Add cart</Button> : ""}
+
+
+           {show ? <Button 
+           variant="danger"
+           onClick={removeFromCart}
+           >remove cart</Button> : ""}
+
+        </Card.Body>
+      </Card>
+  )
+}

@@ -9,3 +9,9 @@
   margin: 27px;
   justify-content: center;
 }
+.cart-value{
+  display: flex;
+  justify-content: end;
+  margin: 15px;
+  font-size: larger;
+}
